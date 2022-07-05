@@ -17,18 +17,18 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
-    $files = File::files(resource_path("posts"));
-    //1.a  with collectors
-    $posts = collect(File::files(resource_path("posts")))
-        ->map (fn($file)=>YamlFrontMatter::parseFile($file)) //returns a document
-        ->map(fn($document)=>
-             new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-                $document->slug
-            ));
+    // $files = File::files(resource_path("posts"));
+    // //1.a  with collectors
+    // $posts = collect(File::files(resource_path("posts")))
+    //     ->map (fn($file)=>YamlFrontMatter::parseFile($file)) //returns a document
+    //     ->map(fn($document)=>
+    //          new Post(
+    //             $document->title,
+    //             $document->excerpt,
+    //             $document->date,
+    //             $document->body(),
+    //             $document->slug
+    //         ));
 
 
 
@@ -78,13 +78,27 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('posts/{post}', function($slug){ //{post} now its a wildcard
+Route::get('posts/{post}', function(Post $post){
+    return view('post', [
+        'post'=> $post
+    ]);
+});
+
+//Route::get('posts/{post}', function($id){ //{post} now its a wildcard
+//note: The Eloqwent class works with id not slug
     //Find a post by its slug and pass it to a view called "post"
     //$post = Post::find($slug);
-    $post = Post::findOrFail($slug);
-    return view('post',[
-        'post'=>$post
-    ]);
+
+
+
+    // $post = Post::findOrFail($id);
+    // return view('post',[
+    //     'post'=>$post
+    // ]);
+
+
+
+
     // $path =__DIR__. "/../resources/posts/{$slug}.html";
     // //ddd($path);
     // if (!file_exists($path)){
@@ -102,5 +116,5 @@ Route::get('posts/{post}', function($slug){ //{post} now its a wildcard
     // return view('post', [
     //     'post'=>$post
     //]);
-});//->where('post', '[A-z_\-]+'); //adding constraint
+//});//->where('post', '[A-z_\-]+'); //adding constraint
 //->whereAlpha('post');
