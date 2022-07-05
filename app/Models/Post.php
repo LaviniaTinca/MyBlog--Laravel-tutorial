@@ -36,8 +36,26 @@ class Post {
 //        return cache()->remember("posts.{$slug}",1200, fn()=> file_get_contents($path));
         //or
         //of all the blog posts, find the one with a slug that matches the one that was requested
+
         return static::all()->firstWhere('slug', $slug);
+        //now we deleted the where clause at the end of the routes so we verify if we acces a null title-page (my-first-post222)
+        // $post = static::all()->firstWhere('slug', $slug);
+        // if (! $post){
+        //     throw new ModelNotFoundException();
+        // }
+        // return $post;
     }
+
+    public static function findOrFail($slug){
+        //now we deleted the where clause at the end of the routes so we verify if we acces a null title-page (my-first-post222)
+        //$post = static::all()->firstWhere('slug', $slug); //but we have duplicate  code
+        $post = static::find($slug);
+        if (! $post){
+            throw new ModelNotFoundException();
+        }
+        return $post;
+    }
+
     public static function all(){
         //return  File::files(resource_path("posts/"));
         //or

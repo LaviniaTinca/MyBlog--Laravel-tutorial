@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
-    @yield('content');
+    <!-- @yield('content'); -->
+     {{$slot}}  <!--default $slot -->
 </body>
 </html>

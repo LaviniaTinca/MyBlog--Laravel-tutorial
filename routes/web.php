@@ -80,7 +80,8 @@ Route::get('/', function () {
 
 Route::get('posts/{post}', function($slug){ //{post} now its a wildcard
     //Find a post by its slug and pass it to a view called "post"
-    $post = Post::find($slug);
+    //$post = Post::find($slug);
+    $post = Post::findOrFail($slug);
     return view('post',[
         'post'=>$post
     ]);
@@ -101,5 +102,5 @@ Route::get('posts/{post}', function($slug){ //{post} now its a wildcard
     // return view('post', [
     //     'post'=>$post
     //]);
-})->where('post', '[A-z_\-]+');
+});//->where('post', '[A-z_\-]+'); //adding constraint
 //->whereAlpha('post');
