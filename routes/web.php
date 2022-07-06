@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Post;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 //use \Spatie\YamlFrontMatter\YamlFrontMatter;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
@@ -34,87 +36,105 @@ Route::get('/', function () {
 
     //1.b with collectors
     //$posts = collect($files)
-//    $posts = collect(File::files(resource_path("posts")))
-//        ->map(function($file){
-//            $document = YamlFrontMatter::parseFile($file);
-//            return new Post(
-//                $document->title,
-//                $document->excerpt,
-//                $document->date,
-//                $document->body(),
-//                $document->slug
-//            );
-//        });
+    //    $posts = collect(File::files(resource_path("posts")))
+    //        ->map(function($file){
+    //            $document = YamlFrontMatter::parseFile($file);
+    //            return new Post(
+    //                $document->title,
+    //                $document->excerpt,
+    //                $document->date,
+    //                $document->body(),
+    //                $document->slug
+    //            );
+    //        });
 
     //2. with array_map
-//    $posts = array_map(function ($file){
-//        $document = YamlFrontMatter::parseFile($file);
-//        return new Post(
-//            $document->title,
-//            $document->excerpt,
-//            $document->date,
-//            $document->body(),
-//            $document->slug
-//        );
-//    }, $files);
+    //    $posts = array_map(function ($file){
+    //        $document = YamlFrontMatter::parseFile($file);
+    //        return new Post(
+    //            $document->title,
+    //            $document->excerpt,
+    //            $document->date,
+    //            $document->body(),
+    //            $document->slug
+    //        );
+    //    }, $files);
 
     //3. with foreach
-//    $posts = [];
-//    foreach ($files as $file){
-//        $document = YamlFrontMatter::parseFile($file);
-//        $posts[] = new Post(
-//            $document->title,
-//            $document->excerpt,
-//            $document->date,
-//            $document->body(),
-//            $document->slug
-//        );
-//    }
+    //    $posts = [];
+    //    foreach ($files as $file){
+    //        $document = YamlFrontMatter::parseFile($file);
+    //        $posts[] = new Post(
+    //            $document->title,
+    //            $document->excerpt,
+    //            $document->date,
+    //            $document->body(),
+    //            $document->slug
+    //        );
+    //    }
     //dd($posts[2]->slug); //  sare o exceptie mereu cu ddd
 
 
-    return view('posts',[
-        'posts'=> Post::all()
+    return view('posts', [
+        //'posts'=>Post::all()
+        //'posts' => Post::latest()->with('category', 'author')->get()
+        'posts' => Post::latest()->get() //we added the attribute $with in Post (we need those categories to optimize - clockwork)
     ]);
 });
 
-Route::get('posts/{post}', function(Post $post){
+
+//Route model binding - the wildcard must mach !!!! the parameter
+Route::get('posts/{post:slug}', function (Post $post) {
     return view('post', [
-        'post'=> $post
+        'post' => $post
     ]);
 });
 
 //Route::get('posts/{post}', function($id){ //{post} now its a wildcard
-//note: The Eloqwent class works with id not slug
-    //Find a post by its slug and pass it to a view called "post"
-    //$post = Post::find($slug);
+//note: The Eloquent class works with id not slug
+//Find a post by its slug and pass it to a view called "post"
+//$post = Post::find($slug);
 
 
 
-    // $post = Post::findOrFail($id);
-    // return view('post',[
-    //     'post'=>$post
-    // ]);
+// $post = Post::findOrFail($id);
+// return view('post',[
+//     'post'=>$post
+// ]);
 
 
 
 
-    // $path =__DIR__. "/../resources/posts/{$slug}.html";
-    // //ddd($path);
-    // if (!file_exists($path)){
-    //     //ddd("file doesn't exist");
-    //     return redirect("/");
-    // }
+// $path =__DIR__. "/../resources/posts/{$slug}.html";
+// //ddd($path);
+// if (!file_exists($path)){
+//     //ddd("file doesn't exist");
+//     return redirect("/");
+// }
 
-    // $post = cache()->remember("posts.{$slug}", 5, function() use ($path){
-    //     //here we cache for 5 seconds but we can now()->addMinutes(20)
-    //     //we use cache when are 10000 loads of the same path in short time
-    //     var_dump('file_get_contents');
-    //     return file_get_contents($path);
-    // });
-    // //$post = file_get_contents($path);
-    // return view('post', [
-    //     'post'=>$post
-    //]);
+// $post = cache()->remember("posts.{$slug}", 5, function() use ($path){
+//     //here we cache for 5 seconds but we can now()->addMinutes(20)
+//     //we use cache when are 10000 loads of the same path in short time
+//     var_dump('file_get_contents');
+//     return file_get_contents($path);
+// });
+// //$post = file_get_contents($path);
+// return view('post', [
+//     'post'=>$post
+//]);
 //});//->where('post', '[A-z_\-]+'); //adding constraint
 //->whereAlpha('post');
+
+Route::get('categories/{category:slug}', function (Category $category) {
+    return view('posts', [
+        // 'posts' => $category->posts->load(['category', 'author'])
+        'posts' => $category->posts  //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+    ]);
+});
+
+Route::get('authors/{author:username}', function (User $author) {
+    return view('posts', [
+        //  'posts' => $author->posts->load(['category', 'author'])
+        'posts' => $author->posts //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+    ]);
+});
