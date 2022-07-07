@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
@@ -18,78 +19,73 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 |
 */
 
-Route::get('/', function () {
-    // $files = File::files(resource_path("posts"));
-    // //1.a  with collectors
-    // $posts = collect(File::files(resource_path("posts")))
-    //     ->map (fn($file)=>YamlFrontMatter::parseFile($file)) //returns a document
-    //     ->map(fn($document)=>
-    //          new Post(
-    //             $document->title,
-    //             $document->excerpt,
-    //             $document->date,
-    //             $document->body(),
-    //             $document->slug
-    //         ));
+// Route::get('/', function () {
+//     // $files = File::files(resource_path("posts"));
+//     // //1.a  with collectors
+//     // $posts = collect(File::files(resource_path("posts")))
+//     //     ->map (fn($file)=>YamlFrontMatter::parseFile($file)) //returns a document
+//     //     ->map(fn($document)=>
+//     //          new Post(
+//     //             $document->title,
+//     //             $document->excerpt,
+//     //             $document->date,
+//     //             $document->body(),
+//     //             $document->slug
+//     //         ));
 
 
 
-    //1.b with collectors
-    //$posts = collect($files)
-    //    $posts = collect(File::files(resource_path("posts")))
-    //        ->map(function($file){
-    //            $document = YamlFrontMatter::parseFile($file);
-    //            return new Post(
-    //                $document->title,
-    //                $document->excerpt,
-    //                $document->date,
-    //                $document->body(),
-    //                $document->slug
-    //            );
-    //        });
+//     //1.b with collectors
+//     //$posts = collect($files)
+//     //    $posts = collect(File::files(resource_path("posts")))
+//     //        ->map(function($file){
+//     //            $document = YamlFrontMatter::parseFile($file);
+//     //            return new Post(
+//     //                $document->title,
+//     //                $document->excerpt,
+//     //                $document->date,
+//     //                $document->body(),
+//     //                $document->slug
+//     //            );
+//     //        });
 
-    //2. with array_map
-    //    $posts = array_map(function ($file){
-    //        $document = YamlFrontMatter::parseFile($file);
-    //        return new Post(
-    //            $document->title,
-    //            $document->excerpt,
-    //            $document->date,
-    //            $document->body(),
-    //            $document->slug
-    //        );
-    //    }, $files);
+//     //2. with array_map
+//     //    $posts = array_map(function ($file){
+//     //        $document = YamlFrontMatter::parseFile($file);
+//     //        return new Post(
+//     //            $document->title,
+//     //            $document->excerpt,
+//     //            $document->date,
+//     //            $document->body(),
+//     //            $document->slug
+//     //        );
+//     //    }, $files);
 
-    //3. with foreach
-    //    $posts = [];
-    //    foreach ($files as $file){
-    //        $document = YamlFrontMatter::parseFile($file);
-    //        $posts[] = new Post(
-    //            $document->title,
-    //            $document->excerpt,
-    //            $document->date,
-    //            $document->body(),
-    //            $document->slug
-    //        );
-    //    }
-    //dd($posts[2]->slug); //  sare o exceptie mereu cu ddd
-
-
-    return view('posts', [
-        //'posts'=>Post::all()
-        //'posts' => Post::latest()->with('category', 'author')->get()
-        'posts' => Post::latest()->get(), //we added the attribute $with in Post (we need those categories to optimize - clockwork)
-        'categories' => Category::all()
-    ]);
-});
+//     //3. with foreach
+//     //    $posts = [];
+//     //    foreach ($files as $file){
+//     //        $document = YamlFrontMatter::parseFile($file);
+//     //        $posts[] = new Post(
+//     //            $document->title,
+//     //            $document->excerpt,
+//     //            $document->date,
+//     //            $document->body(),
+//     //            $document->slug
+//     //        );
+//     //    }
+//     //dd($posts[2]->slug); //  sare o exceptie mereu cu ddd
 
 
-//Route model binding - the wildcard must mach !!!! the parameter
-Route::get('posts/{post:slug}', function (Post $post) {
-    return view('post', [
-        'post' => $post
-    ]);
-});
+//     return view('posts', [
+//         //'posts'=>Post::all()
+//         //'posts' => Post::latest()->with('category', 'author')->get()
+//         'posts' => Post::latest()->get(), //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+//         'categories' => Category::all()
+//     ]);
+// });
+
+
+
 
 //Route::get('posts/{post}', function($id){ //{post} now its a wildcard
 //note: The Eloquent class works with id not slug
@@ -125,6 +121,38 @@ Route::get('posts/{post:slug}', function (Post $post) {
 //]);
 //});//->where('post', '[A-z_\-]+'); //adding constraint
 //->whereAlpha('post');
+
+
+
+//for the LARAVEL BLOG!!!!!!!
+
+
+
+
+Route::get('/', [PostController::class, 'index'])->name('home');  //doesn't work!!!!!!!!!!!!!!!!!!!!!!!
+
+// Route::get('/', function(){
+//     $posts = Post::latest();
+//     if (request('search')){
+//         $posts->where('title', 'like', '%'.request('search').'%');
+
+//     }
+//     return view('posts', [
+//         'posts'=>$posts->get(),
+//         'categories'=>Category::all()
+//     ]);
+// });
+
+
+Route::get('posts/{post:slug}', [PostController::class, 'show']);
+
+
+//Route model binding - the wildcard must mach !!!! the parameter
+// Route::get('posts/{post:slug}', function (Post $post) {
+//     return view('post', [
+//         'post' => $post
+//     ]);
+// });
 
 Route::get('categories/{category:slug}', function (Category $category) {
     return view('posts', [
