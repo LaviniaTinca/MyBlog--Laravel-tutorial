@@ -78,7 +78,8 @@ Route::get('/', function () {
     return view('posts', [
         //'posts'=>Post::all()
         //'posts' => Post::latest()->with('category', 'author')->get()
-        'posts' => Post::latest()->get() //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+        'posts' => Post::latest()->get(), //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+        'categories' => Category::all()
     ]);
 });
 

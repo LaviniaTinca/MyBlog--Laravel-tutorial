@@ -1,9 +1,10 @@
+
 <header class="max-w-xl mx-auto mt-20 text-center">
             <h1 class="text-4xl">
                 Latest <span class="text-blue-500">Laravel From Scratch</span> News
             </h1>
 
-            <h2 class="inline-flex mt-2">By Lary Laracore <img src="./images/lary-head.svg"
+            <h2 class="inline-flex mt-2">By Lary Laracore <img src="/images/lary-head.svg"
                                                                alt="Head of Lary the mascot"></h2>
 
             <p class="text-sm mt-14">
@@ -17,8 +18,8 @@
                     <select class="flex-1 appearance-none bg-transparent py-2 pl-3 pr-9 text-sm font-semibold">
                         <option value="category" disabled selected>Category
                         </option>
-                        <option value="personal">Personal</option>
-                        <option value="business">Business</option>
+                            <option value="/">Personal</option>
+                    
                     </select>
 
                     <svg class="transform -rotate-90 absolute pointer-events-none" style="right: 12px;" width="22"
