@@ -157,13 +157,16 @@ Route::get('posts/{post:slug}', [PostController::class, 'show']);
 Route::get('categories/{category:slug}', function (Category $category) {
     return view('posts', [
         // 'posts' => $category->posts->load(['category', 'author'])
-        'posts' => $category->posts  //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+        'posts' => $category->posts,  //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+        'currentCategory' => $category,
+        'categories' => Category::all()
     ]);
 });
 
 Route::get('authors/{author:username}', function (User $author) {
     return view('posts', [
         //  'posts' => $author->posts->load(['category', 'author'])
-        'posts' => $author->posts //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+        'posts' => $author->posts, //we added the attribute $with in Post (we need those categories to optimize - clockwork)
+        'categories' => Category::all()
     ]);
 });
