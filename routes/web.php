@@ -154,6 +154,7 @@ Route::get('posts/{post:slug}', [PostController::class, 'show']);
 //     ]);
 // });
 
+//after we implemented the filter we don't need this route
 Route::get('categories/{category:slug}', function (Category $category) {
     return view('posts', [
         // 'posts' => $category->posts->load(['category', 'author'])
