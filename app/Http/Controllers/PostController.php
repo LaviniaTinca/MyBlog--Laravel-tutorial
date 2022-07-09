@@ -10,6 +10,7 @@ class PostController extends Controller
 {
     public function index()
     {
+       //return  Post::latest()->filter(request(['search', 'category', 'author']))->paginate(6); //ar trebui sa afiseze in format json dar nu...
         return view('posts.index', [
             //'posts'=> Post::latest()->filter()->get(),
             'posts' => Post::latest()->filter(request(['search', 'category', 'author']))->paginate(6),
