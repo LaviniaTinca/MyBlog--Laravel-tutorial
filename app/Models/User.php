@@ -43,6 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // public function getUsername($username){  // this is an accessor
+    //     return ucwords($username);
+    // }
+
+    public function setPasswordAttribute($password) // this is a mutator , it is necessary to have this format: set name Attribute
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
