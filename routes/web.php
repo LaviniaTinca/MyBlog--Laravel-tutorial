@@ -129,7 +129,7 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 
 
-Route::get('/', [PostController::class, 'index'])->name('home');  //doesn't work!!!!!!!!!!!!!!!!!!!!!!!
+Route::get('/', [PostController::class, 'index'])->name('home');  
 
 // Route::get('/', function(){
 //     $posts = Post::latest();
@@ -156,16 +156,16 @@ Route::get('posts/{post:slug}', [PostController::class, 'show']);
 
 //after we implemented the filter we don't need this route
 Route::get('categories/{category:slug}', function (Category $category) {
-    return view('posts', [
+    return view('posts.index', [
         // 'posts' => $category->posts->load(['category', 'author'])
         'posts' => $category->posts,  //we added the attribute $with in Post (we need those categories to optimize - clockwork)
-        'currentCategory' => $category,
-        'categories' => Category::all()
+        //'currentCategory' => $category,
+        'categories' => Category::all() //i don't need this anymore since I have CategoryDropdown
     ]);
 });
 
 Route::get('authors/{author:username}', function (User $author) {
-    return view('posts', [
+    return view('posts.index', [
         //  'posts' => $author->posts->load(['category', 'author'])
         'posts' => $author->posts, //we added the attribute $with in Post (we need those categories to optimize - clockwork)
         'categories' => Category::all()
