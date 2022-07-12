@@ -3,7 +3,7 @@
         <form method="POST" action="/posts/{{$post->slug}}/comments" >
         @csrf
             <header class="flex items-center">
-                <img src="https://i.pravatar.cc/100?u={{ Auth::user_id() }}" alt="" width="40" height="60" class="rounded-full">
+                <img src="https://i.pravatar.cc/100?u={{ auth()->id() }}" alt="" width="40" height="60" class="rounded-full">
                 <h2 class="ml-4">Want to post a comment?</h2>
             </header>
             <div class="mt-6">
