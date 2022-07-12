@@ -25,9 +25,10 @@ class RegisterController extends Controller
 
         //dd('success validation succeeded');
        // $attributes['password'] = bcrypt($attributes['password']); //or we can set the attribute in the User Model
-        User::create($attributes);
+        $user= User::create($attributes);
        // session()->flash('success', 'Your account has been created!');
        // return redirect('/');
+       auth()->login($user);
 
        return redirect('/')->with('success', 'Your account has been created');
     }
