@@ -135,7 +135,7 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 
 
-Route::get('/', [PostController::class, 'index'])->name('home');  
+Route::get('/', [PostController::class, 'index'])->name('home');
 
 // Route::get('/', function(){
 //     $posts = Post::latest();
@@ -178,7 +178,7 @@ Route::get('authors/{author:username}', function (User $author) {
     ]);
 });
 
-Route::post('posts/{post:slug/comments}', [PostCommentsController::class, 'store'] );
+Route::post('posts/{post:slug/comments}', [PostCommentsController::class, 'store']);
 
 Route::get('register', [RegisterController::class, 'create'])->middleware('guest');
 Route::post('register', [RegisterController::class, 'store'])->middleware('guest');
@@ -191,7 +191,7 @@ Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth'
 Route::post('newsletter', NewsletterController::class);  //single action controller, will call the __invoke function automatically if is defined this way (no array)
 // Route::post('newsletter', function(){
 //     request()->validate(['email'=>'required|email']);  //we are validating what we receive
-    
+
 // // $mailchimp = new \MailchimpMarketing\ApiClient();
 
 // // $mailchimp->setConfig([

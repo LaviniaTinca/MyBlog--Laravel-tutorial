@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function index()
     {
-       //return  Post::latest()->filter(request(['search', 'category', 'author']))->paginate(6); //ar trebui sa afiseze in format json dar nu...
+        //return  Post::latest()->filter(request(['search', 'category', 'author']))->paginate(6); //ar trebui sa afiseze in format json dar nu...
         return view('posts.index', [
             //'posts'=> Post::latest()->filter()->get(),
             'posts' => Post::latest()->filter(request(['search', 'category', 'author']))->paginate(6),
@@ -40,7 +40,8 @@ class PostController extends Controller
         ]);
     }
 
-    public function create(){
+    public function create()
+    {
         // if (auth()->guest()){
         //     //abort(403);
         //     abort(HttpFoundationResponse::HTTP_FORBIDDEN);
@@ -51,20 +52,41 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store(){
+    // public function store(Request $request)
+    // {
+    //     $path = request()->file('thumbnail')->store('thumbnails');
+    //     $attributes = request()->validate([
+    //         'title' => 'required',
+    //         'slug' => ['required', Rule::unique('posts', 'slug')],
+    //         'excerpt' => 'required',
+    //         'thumbnail' => ['required', 'image'],
+    //         'body' => 'required',
+    //         'category_id' => ['required', Rule::exists('categories', 'id')]
+    //     ]);
 
-        $attributes=request()->validate([
-            'title'=>'required',
-            'slug'=>['required', Rule::unique('posts', 'slug')],
-            'excerpt'=>'required',
-            'body'=>'required',
-            'category_id'=>['required', Rule::exists('categories', 'id')]
+    //     $attributes = $request->except('thumbnail');
+    //     $attributes['user_id'] = auth()->id();
+
+    //     $post = Post::create($attributes);
+
+    //     return redirect('/'); //ideally redirect to the post itself
+    // }
+
+    public function store()
+    {
+        $attributes = request()->validate([
+            'title' => 'required',
+            'slug' => ['required', Rule::unique('posts', 'slug')],
+            'excerpt' => 'required',
+            'thumbnail' => ['required', 'image'],
+            'body' => 'required',
+            'category_id' => ['required', Rule::exists('categories', 'id')]
         ]);
 
-        $attributes['user_id']=auth()->id();
+        $attributes['user_id'] = auth()->id();
+        $attributes['thumbnail'] = request()->file('thumbnail')->store('thumbnails');
         Post::create($attributes);
-
-        return redirect('/'); //ideally redirect to the post itself
+        return redirect('/');
     }
 
     //index, show, create, store, edit, update, destroy
