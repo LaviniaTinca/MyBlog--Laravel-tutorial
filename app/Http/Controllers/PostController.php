@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class PostController extends Controller
 {
@@ -35,6 +38,33 @@ class PostController extends Controller
         return view('posts.show', [
             'post' => $post
         ]);
+    }
+
+    public function create(){
+        // if (auth()->guest()){
+        //     //abort(403);
+        //     abort(HttpFoundationResponse::HTTP_FORBIDDEN);
+        // }
+        // if (auth()->user()->username <> 'lavinia'){
+        //     abort(HttpFoundationResponse::HTTP_FORBIDDEN);
+        // }
+        return view('posts.create');
+    }
+
+    public function store(){
+
+        $attributes=request()->validate([
+            'title'=>'required',
+            'slug'=>['required', Rule::unique('posts', 'slug')],
+            'excerpt'=>'required',
+            'body'=>'required',
+            'category_id'=>['required', Rule::exists('categories', 'id')]
+        ]);
+
+        $attributes['user_id']=auth()->id();
+        Post::create($attributes);
+
+        return redirect('/'); //ideally redirect to the post itself
     }
 
     //index, show, create, store, edit, update, destroy

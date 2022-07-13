@@ -188,38 +188,40 @@ Route::post('login', [SessionsController::class, 'store']);
 
 Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth');
 
-//Route::post('newsletter', NewsletterController::class);  //single action controller, will call the __invoke function automatically if is defined this way (no array)
-Route::post('newsletter', function(){
-    request()->validate(['email'=>'required|email']);  //we are validating what we receive
+Route::post('newsletter', NewsletterController::class);  //single action controller, will call the __invoke function automatically if is defined this way (no array)
+// Route::post('newsletter', function(){
+//     request()->validate(['email'=>'required|email']);  //we are validating what we receive
     
-// $mailchimp = new \MailchimpMarketing\ApiClient();
+// // $mailchimp = new \MailchimpMarketing\ApiClient();
 
-// $mailchimp->setConfig([
-// 	'apiKey' => config('services.mailchimp.key'),
-// 	'server' => 'us14'
-// ]);
+// // $mailchimp->setConfig([
+// // 	'apiKey' => config('services.mailchimp.key'),
+// // 	'server' => 'us14'
+// // ]);
 
-try{
-    //$response = $mailchimp->ping->get();
-    //$response = $mailchimp->lists->getAllLists();
-    // $response = $mailchimp->lists->addListMember('3428372f66', [
-    //     //'email_address' => 'laviniaanamariatinca@gmail.com', //this is hardcoding, just to check the functionality
-    //     'email_address'=> request('email'),
-    //     'status'=> 'subscribed'
-    //     ]);
-    $newsletter = new Newsletter(); // or we can send a newsletter as a parameter to the initial function
-    $newsletter->subscribe(request('email'));
+// try{
+//     //$response = $mailchimp->ping->get();
+//     //$response = $mailchimp->lists->getAllLists();
+//     // $response = $mailchimp->lists->addListMember('3428372f66', [
+//     //     //'email_address' => 'laviniaanamariatinca@gmail.com', //this is hardcoding, just to check the functionality
+//     //     'email_address'=> request('email'),
+//     //     'status'=> 'subscribed'
+//     //     ]);
+//     $newsletter = new Newsletter(); // or we can send a newsletter as a parameter to the initial function
+//     $newsletter->subscribe(request('email'));
 
-}catch(\Exception $e){
-    throw ValidationException::withMessages([
-        'email'=>'This email could not be added to our newsletter list.'
-    ]);
+// }catch(\Exception $e){
+//     throw ValidationException::withMessages([
+//         'email'=>'This email could not be added to our newsletter list.'
+//     ]);
+// }
 
-}
 
+// //print_r($response);
+// //dd($response);
+// return redirect('/')
+//     ->with('success', 'You are now signed up for our newsletter!');
+// });
 
-//print_r($response);
-//dd($response);
-return redirect('/')
-    ->with('success', 'You are now signed up for our newsletter!');
-});
+Route::get('admin/posts/create', [PostController::class, 'create'])->middleware('admin');
+Route::post('admin/posts', [PostController::class, 'store'])->middleware('admin');
