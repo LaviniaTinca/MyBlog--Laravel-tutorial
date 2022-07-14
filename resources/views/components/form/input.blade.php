@@ -1,11 +1,12 @@
-@props(['name', 'type' => 'text'])
+@props(['name'])
 <x-form.field>
     <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="{{$name}}">{{ ucwords($name) }}</label>
-    <input class="border border-gray-400 p-2 w-full"
-        type="{{$type}}"
+    <input class="border border-gray-200 p-2 w-full rounded"
+       
         name="{{$name}}"
         id="{{$name}}"
         value="{{ old($name) }}"
-        required>
+        required
+        {{$attributes}}>
     <x-form.error name="{{$name}}"/>
 </x-form.field>

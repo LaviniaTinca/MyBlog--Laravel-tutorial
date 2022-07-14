@@ -1,6 +1,6 @@
 @props(['trigger'])
 
-<div x-data="{show: false}" @click.away="show=false">
+<div x-data="{show: false}" @click.away="show=false" class="position relative">
     <!-- {{--!! Trigger--}} -->
     <div @click = "show =! show">
         {{$trigger}}
